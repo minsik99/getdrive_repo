@@ -5,6 +5,13 @@
 
 /*
 	(수정시 작성 예시)
+	
+	ver 0.5 / 홍은비 / 2024.03.27
+		: 4-1. 카테고리 테이블 CT_NAME 컬럼 추가
+		: 10. INSERT문 추가
+		
+	ver 0.4 / 전상우 / 2024.03.25
+		: 4-4 Board File 삭제
 
 	ver 0.3 / 김민식 / 2024.03.21
 		: edate, odate, reader 등 오타 수정
@@ -116,6 +123,7 @@ COMMENT ON COLUMN TB_TEAM_USER.TU_NAME IS '팀원명';
 CREATE TABLE TB_CATEGORY 
 (	
 	CT_NO NUMBER NOT NULL, 
+	CT_NAME NUMBER NOT NULL, 
 	CT_NAME VARCHAR2(20 BYTE) NOT NULL, 
 	CT_REGDATE DATE NOT NULL, 
 	CT_CRUID NUMBER NOT NULL, 
@@ -125,6 +133,7 @@ CREATE TABLE TB_CATEGORY
 );
 
 COMMENT ON COLUMN TB_CATEGORY.CT_NO IS '카테고리 고유번호';
+COMMENT ON COLUMN TB_CATEGORY.CT_NAME IS '카테고리 이름';
 COMMENT ON COLUMN TB_CATEGORY.CT_REGDATE IS '카테고리 생성일';
 COMMENT ON COLUMN TB_CATEGORY.CT_CRUID IS '카테고리 개설자 회원 고유번호';
 COMMENT ON COLUMN TB_CATEGORY.CT_TID IS '팀 고유번호';
@@ -185,26 +194,6 @@ COMMENT ON COLUMN TB_BOARD_COMMENT.BC_CRUID IS '댓글 등록자,  팀원 고유
 COMMENT ON COLUMN TB_BOARD_COMMENT.BC_BID IS '게시물고유번호';
 COMMENT ON COLUMN TB_BOARD_COMMENT.BC_BCID IS '상위댓글 고유번호';
 COMMENT ON COLUMN TB_BOARD_COMMENT.BC_TID IS '팀 고유번호';
-
-
--- 4-4. 첨부파일 테이블
-CREATE TABLE TB_BOARD_FILE
-(	
-	F_NO NUMBER NOT NULL, 
-	F_EXT CHAR(4 BYTE) NOT NULL, 
-	F_LOC VARCHAR2(200 BYTE) NOT NULL, 
-	F_BNO NUMBER NOT NULL, 
-	F_TID NUMBER NOT NULL, 
-	CONSTRAINT TB_BOARD_FILE_PK PRIMARY KEY (F_NO, F_BNO, F_TID), 
-	CONSTRAINT TB_BOARD_FILE_FK1 FOREIGN KEY (F_TID, F_NO, F_BNO) REFERENCES TB_BOARD (B_TID, B_CTID, B_NO)
-);
-
-COMMENT ON COLUMN TB_BOARD_FILE.F_NO IS '첨부파일 고유번호';
-COMMENT ON COLUMN TB_BOARD_FILE.F_EXT IS '첨부파일 확장자명';
-COMMENT ON COLUMN TB_BOARD_FILE.F_LOC IS '저장위치';
-COMMENT ON COLUMN TB_BOARD_FILE.F_BNO IS '원글 고유번호';
-COMMENT ON COLUMN TB_BOARD_FILE.F_TID IS '팀 고유번호';
-
 
 -- 5-1. 챗팅방 테이블
 CREATE TABLE TB_CHAT 
@@ -511,3 +500,49 @@ COMMENT ON COLUMN TB_SEARCH.S_DATE IS '등록일 or 수정일';
 COMMENT ON COLUMN TB_SEARCH.S_CRUID IS '등록자 고유번호';
 COMMENT ON COLUMN TB_SEARCH.S_ID IS '원 게시물의 고유번호';
 COMMENT ON COLUMN TB_SEARCH.S_TID IS '팀 고유번호';
+
+
+-- 10. INSERT문 (샘플 데이터)
+-- 10-1. 멤버
+INSERT INTO TB_MEMBER VALUES(1, '김민식', 'aaa123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '홍은비', 'bbb123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '전상우', 'ccc123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '김영활', 'ddd123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '이승철', 'eee123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '신예담', 'fff123@naver.com', '123', sysdate, null);
+
+-- 10-2. 팀
+INSERT INTO TB_TEAM VALUES(1, 1, 'get.drive', sysdate);
+INSERT INTO TB_TEAM VALUES((select max(t_mid) + 1 from tb_team), 2, 'team2', sysdate);
+INSERT INTO TB_TEAM VALUES((select max(t_mid) + 1 from tb_team), 3, 'ict_dev', sysdate);
+
+-- 10-3. 카테고리 *** 값 입력이 안됨 (부모키 없음)
+INSERT INTO TB_CATEGORY VALUES(1, '공지사항', sysdate, 2, 1);
+INSERT INTO TB_CATEGORY VALUES((select max(ct_no)  + 1 from tb_category), '자료방', sysdate, 3, 2);
+
+-- 10-4. 게시물 *** 값 입력이 안됨 (부모키 없음)
+INSERT INTO TB_BOARD VALUES(1, '게시물 제목1', '안녕하세요.', 3, '전상우', 'user03', sysdate, null, 1, 3);
+
+-- 10-5. 댓글
+
+-- 10-6. 채팅방
+
+-- 10-7. 채팅방 구성원
+
+-- 10-8. 채팅방 내용
+
+-- 10-9. 채팅 답글
+
+COMMIT;
+
+
+
+
+
+
+
+
+
+
+
+
