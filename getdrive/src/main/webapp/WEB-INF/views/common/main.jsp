@@ -16,7 +16,6 @@
 	width: 100%;
 	height: 20%;
 }
-
 #main {
 	width: 100%;
 	height: 650px;

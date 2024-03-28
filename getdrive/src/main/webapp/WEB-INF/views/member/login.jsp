@@ -51,8 +51,6 @@ input {
 	line-height: 0;
 	text-indent: -9999px;
 }
-
-
 body, button, input, select, td, textarea, th {
 	font-size: 13px;
 	line-height: 1.5;
@@ -69,12 +67,9 @@ fieldset, img {
 	background-color: #fff;
 	box-sizing: border-box;
 }
-
 .box_login {
 	border: 1px solid #blue;
 }
-
-
 
 .inp_text {
 	position: relative;

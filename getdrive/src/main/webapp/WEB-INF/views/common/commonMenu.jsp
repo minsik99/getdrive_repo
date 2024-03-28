@@ -63,6 +63,7 @@
 
 .commonButton {
 	background: #6DBFF2;
+
 	border-radius: 5px;
 	color: white;
 	cursor: pointer;
