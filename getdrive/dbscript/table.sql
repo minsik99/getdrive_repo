@@ -8,8 +8,8 @@
 	
 	ver 0.5 / 홍은비 / 2024.03.27
 		: 4-1. 카테고리 테이블 CT_NAME 컬럼 추가
-		: 10. INSERT문 추가
-		
+		: 10. INSERT문 추가	
+
 	ver 0.4 / 전상우 / 2024.03.25
 		: 4-4 Board File 삭제
 
@@ -123,7 +123,6 @@ COMMENT ON COLUMN TB_TEAM_USER.TU_NAME IS '팀원명';
 CREATE TABLE TB_CATEGORY 
 (	
 	CT_NO NUMBER NOT NULL, 
-	CT_NAME NUMBER NOT NULL, 
 	CT_NAME VARCHAR2(20 BYTE) NOT NULL, 
 	CT_REGDATE DATE NOT NULL, 
 	CT_CRUID NUMBER NOT NULL, 
@@ -287,32 +286,6 @@ COMMENT ON COLUMN TB_CHATREPLY.CR_UDATE IS '답글 수정일';
 COMMENT ON COLUMN TB_CHATREPLY.CR_CCID IS '채팅내용 고유번호';
 COMMENT ON COLUMN TB_CHATREPLY.CR_CID IS '채팅방 고유번호';
 COMMENT ON COLUMN TB_CHATREPLY.CR_TID IS '팀 고유번호';
-
-
--- 5-5. 첨부파일 테이블
-CREATE TABLE TB_CHATFILE 
-(	
-	CF_NO NUMBER NOT NULL, 
-	CF_NAME VARCHAR2(200 BYTE) NOT NULL, 
-	CF_EXT CHAR(4 BYTE) NOT NULL, 
-	CF_LOC VARCHAR2(200 BYTE) NOT NULL, 
-	CF_CDATE DATE NOT NULL, 
-	CF_CCID NUMBER NOT NULL, 
-	CF_TID NUMBER NOT NULL, 
-	CF_CID NUMBER NOT NULL, 
-	CONSTRAINT TB_CHATFILE_PK PRIMARY KEY (CF_NO, CF_TID, CF_CCID, CF_CID), 
-	CONSTRAINT TB_CHATFILE_FK3 FOREIGN KEY (CF_CCID, CF_CID, CF_TID) REFERENCES TB_CHATCONTENT (CC_NO, CC_CID, CC_TID)
-);
-
-COMMENT ON COLUMN TB_CHATFILE.CF_NO IS '첨부파일 고유번호';
-COMMENT ON COLUMN TB_CHATFILE.CF_NAME IS '첨부파일명';
-COMMENT ON COLUMN TB_CHATFILE.CF_EXT IS '첨부파일 확장자명';
-COMMENT ON COLUMN TB_CHATFILE.CF_LOC IS '저장위치';
-COMMENT ON COLUMN TB_CHATFILE.CF_CDATE IS '생성일자';
-COMMENT ON COLUMN TB_CHATFILE.CF_CCID IS '채팅내용 고유번호';
-COMMENT ON COLUMN TB_CHATFILE.CF_TID IS '팀 고유번호';
-COMMENT ON COLUMN TB_CHATFILE.CF_CID IS '채팅방 고유번호';
-
 
 -- 6-1. 드라이브 테이블
 CREATE TABLE TB_DRIVE 
@@ -501,6 +474,43 @@ COMMENT ON COLUMN TB_SEARCH.S_CRUID IS '등록자 고유번호';
 COMMENT ON COLUMN TB_SEARCH.S_ID IS '원 게시물의 고유번호';
 COMMENT ON COLUMN TB_SEARCH.S_TID IS '팀 고유번호';
 
+-- 트리거 추가 2024.03.27 김영활
+
+--  게시판테이블 등록시 검색테이블에 등록
+create or replace TRIGGER TRI_INSERT_BD_Search
+AFTER INSERT ON TB_Board
+FOR EACH ROW
+BEGIN
+  INSERT INTO TB_Search ( S_NO, S_MENU, S_TITLE, S_CONTENT, S_DATE, S_CRUID, S_ID, S_TID )
+  VALUES ( (select max(s_no)+1 from tb_search) , 'BD', :NEW.B_Title,  :NEW.B_CONTENT,  :NEW.B_CDATE,  :NEW.B_CRUID,  :NEW.B_NO,  :NEW.B_TID);
+END;
+
+--  게시판테이블 수정시 검색테이블에 등록
+create or replace TRIGGER TRI_update_BD_Search
+AFTER update ON TB_Board
+FOR EACH ROW
+BEGIN
+  INSERT INTO TB_Search ( S_NO, S_MENU, S_TITLE, S_CONTENT, S_DATE, S_CRUID, S_ID, S_TID )
+  VALUES ( (select max(s_no)+1 from tb_search), 'BD', :NEW.B_Title,  :NEW.B_CONTENT,  :NEW.B_UDATE,  :NEW.B_CRUID,  :NEW.B_NO,  :NEW.B_TID);
+END;
+
+--   드라이브테이블 등록시 검색테이블에 등록
+create or replace TRIGGER TRI_INSERT_DV_Search
+AFTER INSERT ON TB_Drive_file
+FOR EACH ROW
+BEGIN
+  INSERT INTO TB_Search ( S_NO, S_MENU, S_TITLE, S_CONTENT, S_DATE, S_CRUID, S_ID, S_TID )
+  VALUES ( (select max(s_no)+1 from tb_search) , 'DV', :NEW.FL_NAME,  :NEW.FL_NAME,  :NEW.FL_CDATE,  :NEW.FL_CRUID,  :NEW.FL_NO,  :NEW.FL_TID);
+END;
+
+--   드라이브테이블 등록시 검색테이블에 등록
+create or replace TRIGGER TRI_update_DV_Search
+AFTER INSERT ON TB_Drive_file
+FOR EACH ROW
+BEGIN
+  INSERT INTO TB_Search ( S_NO, S_MENU, S_TITLE, S_CONTENT, S_DATE, S_CRUID, S_ID, S_TID )
+  VALUES ( (select max(s_no)+1 from tb_search) , 'DV', :NEW.FL_NAME,  :NEW.FL_NAME,  :NEW.FL_UDATE,  :NEW.FL_CRUID,  :NEW.FL_NO,  :NEW.FL_TID);
+END;
 
 -- 10. INSERT문 (샘플 데이터)
 -- 10-1. 멤버
@@ -516,12 +526,20 @@ INSERT INTO TB_TEAM VALUES(1, 1, 'get.drive', sysdate);
 INSERT INTO TB_TEAM VALUES((select max(t_mid) + 1 from tb_team), 2, 'team2', sysdate);
 INSERT INTO TB_TEAM VALUES((select max(t_mid) + 1 from tb_team), 3, 'ict_dev', sysdate);
 
--- 10-3. 카테고리 *** 값 입력이 안됨 (부모키 없음)
-INSERT INTO TB_CATEGORY VALUES(1, '공지사항', sysdate, 2, 1);
-INSERT INTO TB_CATEGORY VALUES((select max(ct_no)  + 1 from tb_category), '자료방', sysdate, 3, 2);
+-- 10-3. 팀원 
+INSERT INTO TB_TEAM_USER VALUES(1, 1, sysdate, null, 'Y', '김민식');
+INSERT INTO TB_TEAM_USER VALUES(1, 2, sysdate, null, 'N', '홍은비');
+INSERT INTO TB_TEAM_USER VALUES(1, 3, sysdate, null, 'N', '전상우');
+INSERT INTO TB_TEAM_USER VALUES(2, 4, sysdate, null, 'Y', '김영활');
+INSERT INTO TB_TEAM_USER VALUES(2, 5, sysdate, null, 'N', '이승철');
+INSERT INTO TB_TEAM_USER VALUES(2, 6, sysdate, null, 'N', '신예담');
 
--- 10-4. 게시물 *** 값 입력이 안됨 (부모키 없음)
-INSERT INTO TB_BOARD VALUES(1, '게시물 제목1', '안녕하세요.', 3, '전상우', 'user03', sysdate, null, 1, 3);
+-- 10-3. 카테고리 *** 값 입력이 안됨 (부모키 없음) ***
+INSERT INTO TB_CATEGORY VALUES(1, '공지사항', sysdate, 2, 1);
+INSERT INTO TB_CATEGORY VALUES((select max(ct_no)  + 1 from tb_category), '자료방', sysdate, 3, 1);
+
+-- 10-4. 게시물 *** 값 입력이 안됨 (부모키 없음) ***
+INSERT INTO TB_BOARD VALUES(1, '게시물 제목1', '안녕하세요.', 3, '전상우', 'user03', sysdate, null, 1, 1);
 
 -- 10-5. 댓글
 
@@ -534,10 +552,6 @@ INSERT INTO TB_BOARD VALUES(1, '게시물 제목1', '안녕하세요.', 3, '전�
 -- 10-9. 채팅 답글
 
 COMMIT;
-
-
-
-
 
 
 
