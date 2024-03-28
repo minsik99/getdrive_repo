@@ -16,7 +16,6 @@
 	width: 100%;
 	height: 20%;
 }
-
 #main {
 	width: 100%;
 	height: 650px;
@@ -32,20 +31,17 @@
 	width: 49.9%;
 	height: 650px;
 	float: right;
-	border-left: 1px solid black;
+	border-left: 1px solid #999999;
 	text-align: center;
 }
 
 #footer {
-	padding: 30px 0px;
+	margin: 10px 0px 0px;
 	width: 100%;
-	height: 50px;
+	height: 90px;
 	text-align: center;
 }
 </style>
-<script type="text/javascript">
-	function 
-</script>
 </head>
 <body>
 	<div id="full">
@@ -60,11 +56,11 @@
 			<div id="right">
 				<c:import url="/WEB-INF/views/member/login.jsp"></c:import>
 			</div>
-
+		</div>
+		<hr>
+		<div id="footer">
+			<c:import url="/WEB-INF/views/common/footer.jsp"></c:import>
 		</div>
 	</div>
-
-	<hr>
-	<div id="footer">푸터</div>
 </body>
 </html>

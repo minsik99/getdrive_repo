@@ -9,9 +9,10 @@
 <style type="text/css">
 #loginzone {
 	width: 40%;
-	margin: 5%;
+	height: 80%;
 	vertical-align: middle;
 	display: inline-block;
+	margin-top:120px; 
 }
 input {
 	-webkit-writing-mode: horizontal-tb !important;
@@ -29,7 +30,6 @@ input {
 	-webkit-rtl-ordering: logical;
 	cursor: text;
 	margin: 0em;
-	font: 400 13.3333px Arial;
 	padding: 1px 0px;
 	border-width: 2px;
 	border-style: inset;
@@ -43,13 +43,6 @@ input {
 	top: 50%;
 	margin: -145px 0 0 -160px;
 }
-
-.login_tistory {
-	position: relative;
-	width: 320px;
-	margin: 0 auto;
-}
-
 .screen_out {
 	position: absolute;
 	width: 0;
@@ -58,7 +51,6 @@ input {
 	line-height: 0;
 	text-indent: -9999px;
 }
-
 body, button, input, select, td, textarea, th {
 	font-size: 13px;
 	line-height: 1.5;
@@ -75,6 +67,9 @@ fieldset, img {
 	background-color: #fff;
 	box-sizing: border-box;
 }
+.box_login {
+	border: 1px solid #blue;
+}
 
 .inp_text {
 	position: relative;
@@ -82,6 +77,7 @@ fieldset, img {
 	margin: 0;
 	padding: 8px 19px 8px;
 	box-sizing: border-box;
+	font-size : 50pt;
 }
 
 .inp_text+.inp_text {
@@ -92,16 +88,23 @@ fieldset, img {
 	display: block;
 	width: 100%;
 	height: 40px;
-	font-size: 13px;
-	color: #000;
+	font-size: 18px;
+	font-family :sans-serif;
+	font-weight: 600;
+	color: #444444;
 	border: none;
 	outline: 0;
 	-webkit-appearance: none;
 	background-color: transparent;
+	cursor: pointer;
+}
+
+.inp_text input::placeholder{
+	color: #999999;
 }
 
 .btn_login {
-	background: rgb(107, 185, 237);
+	background: #6DBFF2;
 	border-radius: 5px;
 	color: white;
 	cursor: pointer;
@@ -110,84 +113,38 @@ fieldset, img {
 	width: 100%;
 	height: 40px;
 	text-align: center;
+	font-weight: 600;
+	font-size: 12pt;
 }
 
 .btn_login:active {
 	color: white;
 	background: rgb(200, 230, 255);
-}
-
-.login_append {
-	overflow: hidden;
-	padding: 0 0 0;
-}
-
-.inp_chk {
-	display: inline-block;
-	position: relative;
-	margin-bottom: -1px;
-}
-
-.login_append .inp_chk {
-	float: left;
-}
-
-.inp_chk .inp_radio {
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	left: 0;
-	width: 18px;
-	height: 18px;
-	border: 0;
-}
-
-.inp_chk .lab_g {
-	display: inline-block;
-	margin-right: 19px;
-	color: #909090;
-	font-size: 13px;
-	line-height: 19px;
-	vertical-align: top;
-}
-
-.inp_chk .ico_check {
-	display: inline-block;
-	width: 18px;
-	height: 18px;
-	margin: 1px 4px 0 0;
-	background-position: -60px 0;
-	color: #333;
-}
-
-.inp_chk .txt_lab {
-	vertical-align: top;
+	border:none;
 }
 
 .login_append.txt_find {
 	float: right;
-	color: #777;
+	color: #666666;
 	text-align: center;
+	font-weight: 600;
+	text-decoration-line: none;
 }
 
 .login_append.txt_find:active {
-	color: gray;
+	color: #999999;
+	border:none;
 }
 
 .QR_login {
+	color: #666666;
 	line-height: 2.1;
+	font-weight: 600;
+	text-decoration-line: none;
 }
 
 .QR_login:active {
-	color: gray;
-}
-
-.login_bottom {
-	height: 500px;
-}
-
-.snsicon {
-	
+	color: #999999;
 }
 
 #google {
@@ -206,7 +163,7 @@ fieldset, img {
 }
 
 .join_button {
-	background: rgb(107, 185, 237);
+	background: #6DBFF2;
 	border-radius: 5px;
 	color: white;
 	cursor: pointer;
@@ -215,11 +172,14 @@ fieldset, img {
 	width: 100%;
 	height: 40px;
 	text-align: center;
+	font-weight: 600;
+	font-size: 12pt;
 }
 
 .join_button:active {
 	color: white;
 	background: rgb(200, 230, 255);
+	border:none;
 }
 
 .notpermission {
@@ -227,6 +187,11 @@ fieldset, img {
 	text-align: left;
 }
 </style>
+<script type="text/javascript">
+function moveContractPage(){
+	location.href = "contract.do";
+}
+</script>
 </head>
 <body>
 	<div id="loginzone">
@@ -236,11 +201,11 @@ fieldset, img {
 			<div class="box_login">
 				<div class="inp_text">
 					<label for="loginId" class="screen_out"> 아이디</label> 
-					<input type="email" id="uid" name="userId" placeholder="ID" class="pos">
+					<input type="email" id="loginId" name="loginId" placeholder="이메일" class="pos">
 				</div>
 				<div class="inp_text">
 					<label for="loginPw" class="screen_out"> 비밀번호</label> 
-					<input type="password" id="upwd" name="userPwd" placeholder="Password" class="pos">
+					<input type="password" id="loginPw" name="loginPw" placeholder="비밀번호" class="pos">
 				</div>
 			</div>
 			<div class="notpermission">아이디 또는 비밀번호가 일치하지 않습니다.</div>
@@ -255,19 +220,12 @@ fieldset, img {
 			</div>
 			<div class="login_bottom">
 				<div class="snsicon">
-					<a href="http://www.google.com">
-						<img id="google" alt="getdrive" src="/getdrive/resources/images/google.png">
-					</a> 
-					<a href="http://www.daum.net">
-						<img id="kakao" alt="getdrive"src="/getdrive/resources/images/kakao.jpg">
-					</a> 
-					<a href="http://www.naver.com">
-						<img id="naver" alt="getdrive"src="/getdrive/resources/images/naver.png">
-					</a>
+					<a href="http://www.google.com"><img id="google" alt="getdrive" src="/getdrive/resources/images/google.png"></a> 
+					<a href="http://www.daum.net"><img id="kakao" alt="getdrive"src="/getdrive/resources/images/kakao.jpg"></a> 
+					<a href="http://www.naver.com"><img id="naver" alt="getdrive"src="/getdrive/resources/images/naver.png"></a>
 				</div>
 				<div>
-					<a href="/getdrive/views/page/provision.html">
-					<button type="button" class="join_button" disabled>아직 계정이 없으신가요?</button></a>
+					<button onclick="moveContractPage();" type="button" class="join_button">아직 계정이 없으신가요?</button></a>
 				</div>
 			</div>
 		</fieldset>
