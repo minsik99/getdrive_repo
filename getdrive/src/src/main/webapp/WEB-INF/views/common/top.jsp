@@ -20,7 +20,6 @@ body {
   width: 1100px;
   margin: 0px auto;
   padding: 20px;
-  border: 1px solid #bcbcbc;
 }
 
 #header {
@@ -56,7 +55,7 @@ body {
 	height : 50px;
 	border : 10 px ;
 	background : white ;
-	border: 1px solid gray; /* 테두리 선을 1px 회색으로 설정 */
+	
 	border-collapse: collapse;
 }
 
@@ -65,12 +64,15 @@ body {
 <body>
 
 <table id="headerTable">
-<tr><th width=100><a href="#"><img src="" alt="로고이미지"></a></th>
-	<th width=300 >
-		<form>
-		<input type="text">
-		<input type="submit" value="검색">
-		</form></th>	
+<tr><th width=100>
+	<a href="/getdrive/"><img id="logo" alt="getdrive"src="/getdrive/resources/images/logo.png"></a></th>
+	<th width=300 >	
+		<form action="searchList.do" method="post">
+			<input type="hidden" name="limit" value="10">	
+			<input type="search" name="keyword"> &nbsp;
+			<input type="submit" value="검색">
+		</form>
+		</th>	
 	<th align="right">
 		<a href="#">알람</a>
 		<a href="#">아이콘+이름</a>
