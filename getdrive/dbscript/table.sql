@@ -1,23 +1,20 @@
--- 생성시 "C##TESTWEB"를 다른글자로 일괄 변경후 실행할 것.
 -- 자동생성 스크립트이므로 꼭, 내용을 확인할 것.
--- INSERT 추가 검토할 것.
 -- 변경시 변경버전 추가하고 수정내용 아래와 작성할 것.
-
+-- 트리거 4개를 한번에 실행시 오류가 확인됨. 삭제함.
 /*
-	(수정시 작성 예시)
 
-	ver 0.3 / 김민식 / 2024.03.21
+	ver 0.5 / 김영활 / 2024.03.29
+                : 검색테이블 칼럼 추가 및 트리거 4개 삭제
+
+	ver 0.4 / 홍은비 / 2024.03.27
+		: 4-1. 카테고리 테이블 CT_NAME 컬럼 추가
+		: 10. INSERT문 추가	
+
+	ver 0.3 / 전상우 / 2024.03.25
+		: 4-4 Board File 삭제
+
+	ver 0.2 / 김민식 / 2024.03.21
 		: edate, odate, reader 등 오타 수정
-
-	ver 0.21 / 아무개 / 2024.03.19
-		: 테이블 TB_MEMBER 의 칼럼명 M_NO 에서 M_NUM 으로 변경
-		: 테이블 TB_BOARD_FILE 삭제
-		: 테이블 TB_CHATROOMUSER_1 추가
-	
-	ver 0.2 / 홍길동 / 2024.03.19
-		: 테이블 TB_MEMBER 의 칼럼명 M_NO 에서 M_NUM 으로 변경
-		: 테이블 TB_BOARD_FILE 삭제
-		: 테이블 TB_CHATROOMUSER_1 추가	
 
 	ver 0.1 / 김영활 / 2024.03.19
 		: 최초 작성
@@ -299,32 +296,6 @@ COMMENT ON COLUMN TB_CHATREPLY.CR_CCID IS '채팅내용 고유번호';
 COMMENT ON COLUMN TB_CHATREPLY.CR_CID IS '채팅방 고유번호';
 COMMENT ON COLUMN TB_CHATREPLY.CR_TID IS '팀 고유번호';
 
-
--- 5-5. 첨부파일 테이블
-CREATE TABLE TB_CHATFILE 
-(	
-	CF_NO NUMBER NOT NULL, 
-	CF_NAME VARCHAR2(200 BYTE) NOT NULL, 
-	CF_EXT CHAR(4 BYTE) NOT NULL, 
-	CF_LOC VARCHAR2(200 BYTE) NOT NULL, 
-	CF_CDATE DATE NOT NULL, 
-	CF_CCID NUMBER NOT NULL, 
-	CF_TID NUMBER NOT NULL, 
-	CF_CID NUMBER NOT NULL, 
-	CONSTRAINT TB_CHATFILE_PK PRIMARY KEY (CF_NO, CF_TID, CF_CCID, CF_CID), 
-	CONSTRAINT TB_CHATFILE_FK3 FOREIGN KEY (CF_CCID, CF_CID, CF_TID) REFERENCES TB_CHATCONTENT (CC_NO, CC_CID, CC_TID)
-);
-
-COMMENT ON COLUMN TB_CHATFILE.CF_NO IS '첨부파일 고유번호';
-COMMENT ON COLUMN TB_CHATFILE.CF_NAME IS '첨부파일명';
-COMMENT ON COLUMN TB_CHATFILE.CF_EXT IS '첨부파일 확장자명';
-COMMENT ON COLUMN TB_CHATFILE.CF_LOC IS '저장위치';
-COMMENT ON COLUMN TB_CHATFILE.CF_CDATE IS '생성일자';
-COMMENT ON COLUMN TB_CHATFILE.CF_CCID IS '채팅내용 고유번호';
-COMMENT ON COLUMN TB_CHATFILE.CF_TID IS '팀 고유번호';
-COMMENT ON COLUMN TB_CHATFILE.CF_CID IS '채팅방 고유번호';
-
-
 -- 6-1. 드라이브 테이블
 CREATE TABLE TB_DRIVE 
 (	
@@ -489,25 +460,79 @@ COMMENT ON COLUMN TB_ALARM_CHECK.AC_CDATE IS '알람 확인일자';
 COMMENT ON COLUMN TB_ALARM_CHECK.AC_UID IS '팀원 고유번호';
 COMMENT ON COLUMN TB_ALARM_CHECK.AC_TID IS '팀 고유번호';
 
+-- 9. 통합검색 테이블 : 2024.03.29 김영활 수정
+  CREATE TABLE "TB_SEARCH" 
+   (	"S_NO" NUMBER NOT NULL ENABLE, 
+	"S_MENU" VARCHAR2(20 BYTE) NOT NULL ENABLE, 
+	"S_TITLE" VARCHAR2(200 BYTE) NOT NULL ENABLE, 
+	"S_CONTENT" VARCHAR2(4000 BYTE), 
+	"S_DATE" DATE NOT NULL ENABLE, 
+	"S_CRUID" NUMBER NOT NULL ENABLE, 
+	"S_ID" NUMBER NOT NULL ENABLE, 
+	"S_CTID" NUMBER NOT NULL ENABLE, 
+	"S_TID" NUMBER NOT NULL ENABLE, 
+	 CONSTRAINT "TB_SEARCH_PK" PRIMARY KEY ("S_NO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
 
--- 9. 통합검색 테이블
-CREATE TABLE TB_SEARCH 
-(	
-	S_NO NUMBER NOT NULL, 
-	S_MENU VARCHAR2(20 BYTE) NOT NULL, 
-	S_TITLE VARCHAR2(200 BYTE) NOT NULL, 
-	S_CONTENT VARCHAR2(4000 BYTE), 
-	S_DATE DATE NOT NULL, 
-	S_CRUID NUMBER NOT NULL, 
-	S_ID NUMBER NOT NULL, 
-	S_TID NUMBER NOT NULL
-);
+   COMMENT ON COLUMN "TB_SEARCH"."S_NO" IS '알람 고유번호';
+   COMMENT ON COLUMN "TB_SEARCH"."S_MENU" IS '구분 게시물 카테고리/채팅/드라이브/캘린더';
+   COMMENT ON COLUMN "TB_SEARCH"."S_TITLE" IS '제목 or 파일명';
+   COMMENT ON COLUMN "TB_SEARCH"."S_CONTENT" IS '내용';
+   COMMENT ON COLUMN "TB_SEARCH"."S_DATE" IS '등록일 or 수정일';
+   COMMENT ON COLUMN "TB_SEARCH"."S_CRUID" IS '등록자 고유번호';
+   COMMENT ON COLUMN "TB_SEARCH"."S_ID" IS '원 게시물의 고유번호';
+   COMMENT ON COLUMN "TB_SEARCH"."S_CTID" IS '카테고리';
+   COMMENT ON COLUMN "TB_SEARCH"."S_TID" IS '팀 고유번호';
 
-COMMENT ON COLUMN TB_SEARCH.S_NO IS '알람 고유번호';
-COMMENT ON COLUMN TB_SEARCH.S_MENU IS '구분 게시물 카테고리/채팅/드라이브/캘린더';
-COMMENT ON COLUMN TB_SEARCH.S_TITLE IS '제목 or 파일명';
-COMMENT ON COLUMN TB_SEARCH.S_CONTENT IS '내용';
-COMMENT ON COLUMN TB_SEARCH.S_DATE IS '등록일 or 수정일';
-COMMENT ON COLUMN TB_SEARCH.S_CRUID IS '등록자 고유번호';
-COMMENT ON COLUMN TB_SEARCH.S_ID IS '원 게시물의 고유번호';
-COMMENT ON COLUMN TB_SEARCH.S_TID IS '팀 고유번호';
+
+-- 10. INSERT문 (샘플 데이터)
+-- 10-1. 멤버
+INSERT INTO TB_MEMBER VALUES(1, '김민식', 'aaa123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '홍은비', 'bbb123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '전상우', 'ccc123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '김영활', 'ddd123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '이승철', 'eee123@naver.com', '123', sysdate, null);
+INSERT INTO TB_MEMBER VALUES((select max(m_no) + 1 from tb_member), '신예담', 'fff123@naver.com', '123', sysdate, null);
+
+-- 10-2. 팀
+INSERT INTO TB_TEAM VALUES(1, 1, 'get.drive', sysdate);
+INSERT INTO TB_TEAM VALUES((select max(t_mid) + 1 from tb_team), 2, 'team2', sysdate);
+INSERT INTO TB_TEAM VALUES((select max(t_mid) + 1 from tb_team), 3, 'ict_dev', sysdate);
+
+-- 10-3. 팀원 
+INSERT INTO TB_TEAM_USER VALUES(1, 1, sysdate, null, 'Y', '김민식');
+INSERT INTO TB_TEAM_USER VALUES(1, 2, sysdate, null, 'N', '홍은비');
+INSERT INTO TB_TEAM_USER VALUES(1, 3, sysdate, null, 'N', '전상우');
+INSERT INTO TB_TEAM_USER VALUES(2, 4, sysdate, null, 'Y', '김영활');
+INSERT INTO TB_TEAM_USER VALUES(2, 5, sysdate, null, 'N', '이승철');
+INSERT INTO TB_TEAM_USER VALUES(2, 6, sysdate, null, 'N', '신예담');
+
+-- 10-3. 카테고리 *** 값 입력이 안됨 (부모키 없음) ***
+INSERT INTO TB_CATEGORY VALUES(1, '공지사항', sysdate, 2, 1);
+INSERT INTO TB_CATEGORY VALUES((select max(ct_no)  + 1 from tb_category), '자료방', sysdate, 3, 1);
+
+-- 10-4. 게시물 *** 값 입력이 안됨 (부모키 없음) ***
+INSERT INTO TB_BOARD VALUES(1, '게시물 제목1', '안녕하세요.', 3, '전상우', 'user03', sysdate, null, 1, 1);
+
+-- 10-5. 댓글
+
+-- 10-6. 채팅방
+
+-- 10-7. 채팅방 구성원
+
+-- 10-8. 채팅방 내용
+
+-- 10-9. 채팅 답글
+
+COMMIT;
