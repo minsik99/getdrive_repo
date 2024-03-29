@@ -55,11 +55,63 @@ div#butt button {
 
 .teamselectButt {
 	background: rgb(107, 185, 237);
-	border-radius: 5px;
-	color: white;
-	cursor: pointer;
-	border: 1px solid rgb(107, 185, 237);
-	padding: 7px;
+  
+#top {
+	width: 100%;
+	height: 100px;
+	margin-top:100px; 
+}
+#topmenu {
+	width: 70%;
+	height: 100px;
+	float: left;
+	margin: auto;
+	text-align: center;
+}
+#topbutton {
+	width: 30%;
+	height: 100px;
+	float: right;
+	margin: auto;
+	text-align: center;
+}
+#middle {
+	width: 100%;
+	height: 100px;
+	margin-top:50px; 
+}
+#middlemenu {
+	width: 70%;
+	float: left;
+	text-align: center;
+	margin: auto;
+}
+#middlebutton {
+	width: 30%;
+	float: right;
+	text-align: center;
+	margin: auto;
+}
+#bottom {
+	width: 100%;
+	height: 100px;
+	margin-top:50px; 
+}
+#bottommenu {
+	width: 70%;
+	float: left;
+	text-align: center;
+	margin: auto;
+}
+#bottombutton {
+	width: 30%;
+	float: right;
+	text-align: center;
+	margin: auto;
+}
+
+.commonButton {
+	background: #6DBFF2;
 	width: 80px;
 	height: 35px;
 	text-align: center;
@@ -109,7 +161,5 @@ function movePage(){
 		<br>
 		<br>
 	</div>
-
-
 </body>
 </html>
