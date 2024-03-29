@@ -11,7 +11,6 @@
 	margin: 10px;
 	width: 150px;
 }
-
 #logospace {
 	margin: 10px;
 	width: 180px;

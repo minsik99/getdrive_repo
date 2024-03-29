@@ -40,10 +40,5 @@ public class HomeController {
 	public String forwardMainView() {
 		return "common/main";
 	}
-	
-	@RequestMapping("template.do")
-	public String templateView() {
-		return "common/template";
-	}	
 
 }

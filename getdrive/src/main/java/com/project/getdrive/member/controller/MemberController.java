@@ -12,7 +12,7 @@ public class MemberController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
-	@RequestMapping(value="provision.do", method= {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="contract.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String moveContractPage() {
 		return "member/contract";
 	}
