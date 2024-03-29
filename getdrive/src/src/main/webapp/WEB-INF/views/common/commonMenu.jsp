@@ -15,7 +15,7 @@
 	text-align: center;
 }
 
-#butt {
+div#butt button {
 	float: right;
 }
 
@@ -70,6 +70,12 @@
 	background: rgb(200, 230, 255);
 }
 </style>
+<script type="text/javascript">
+function movePage(){
+	location.href = "provision.do";
+}
+
+</script>
 </head>
 <body>
 	<div id="guide">
@@ -88,12 +94,12 @@
 		<br>
 		<br>
 		<br>
-		<br> <a href="/getdrive/views/page/provision.html"><input
-			class="joinButt" type="button" value="회원가입"><br>
+		<br> 
+		<button onclick="movePage();" class="joinButt" >회원가입</button>
 		<br>
 		<br>
 		<br>
-		<br></a> <input class="teamcreateButt" type="button" value="팀 개설"><br>
+		<br> <input class="teamcreateButt" type="button" value="팀 개설"><br>
 		<br>
 		<br>
 		<br>
