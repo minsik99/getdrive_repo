@@ -56,7 +56,6 @@ public class MemberController {
 	public String loginMethod(Member member, HttpSession session, SessionStatus status, Model model) {
 		logger.info("login.do : " + member.toString());
 		
-		//Member loginMember = memberService.login(member);
 		
 		Member loginMember = memberService.selectMember(member.getEmail());
 		
