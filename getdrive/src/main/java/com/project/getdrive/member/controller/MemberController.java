@@ -26,12 +26,11 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
-	//약관페이지 이동
+
 	@RequestMapping(value="mainPage.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String moveMainPage() {
 		return "common/main";
 	}
-	//약관페이지 이동
 	@RequestMapping(value="contractPage.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String moveContractPage() {
 		return "member/contract";
