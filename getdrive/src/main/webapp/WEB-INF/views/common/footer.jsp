@@ -8,6 +8,7 @@
 <title></title>
 <style type="text/css">
 #footer-content{
+	width : 100%;
  	text-align:center; 
  	background: #9BD1F2;
  	height: 100px;

@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title></title>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
-	<script type="text/javascript">
+<script type="text/javascript">
 		$(function() {
 			$(".chkAll").click(function() {
 				if($(".chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
@@ -28,9 +28,9 @@
 	    $(".chkAll").change(function(){
 	        var isChecked = this.checked;
 	        if(isChecked){
-	            $("#nextbutton").prop("disabled", false).css({'color': 'white', 'background': 'rgb(107, 185, 237)' });
+	            $("#button").prop("disabled", false).css({'color': 'white', 'background': 'rgb(107, 185, 237)' });
 	    	}else {
-	            $("#nextbutton").prop("disabled", true).css({'color': '#696969', 'background': '#DCDCDC', 'border': 'none'});
+	            $("#button").prop("disabled", true).css({'color': '#696969', 'background': '#DCDCDC', 'border': 'none'});
 	        }
 	    });
 	});
@@ -45,13 +45,21 @@
 	        });
 
 	        if (allChecked) {
-	            $("#nextbutton").prop("disabled", false).css({'color': 'white', 'background': 'rgb(107, 185, 237)' });
+	            $("#button").prop("disabled", false).css({'color': 'white', 'background': 'rgb(107, 185, 237)' });
 	        } else {
-	            $("#nextbutton").prop("disabled", true).css({'color': '#696969', 'background': '#DCDCDC', 'border': 'none'});
+	            $("#button").prop("disabled", true).css({'color': '#696969', 'background': '#DCDCDC', 'border': 'none'});
 	        }
 	    });
 	});
 	</script>
+	
+
+<script type="text/javascript">
+function moveRegisterPage(){
+	location.href = "registerPage.do";
+}
+</script>
+
 <style type="text/css">
 * {
 	margin: 0;
@@ -195,7 +203,7 @@ ul.join_box {
 </style>
 </head>
 <body>
-	<form action="contract.do" id="joinForm">
+	<form action="contractPage.do" id="joinForm">
 		<div id="header">
 			<c:import url="/WEB-INF/views/common/mainTopbar.jsp"></c:import>
 		</div>
@@ -247,7 +255,7 @@ ul.join_box {
 Class.getdrive 서비스는 개인정보를 다음의 목적을 위해 처리합니다. 처리한 개인정보는 다음의 목적 이외의 용도로는 사용되지 않으며 이용 목적이 변경될 시에는 사전동의를 구할 예정입니다.
 
 ① Class.getdrive서비스는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집시에 동의 받은 개인정보 보유, 이용기간 내에서 개인정보를 처리, 보유합니다.
-② 토스랩은 Class.getdrive 서비스 회원가입, 회원 식별, Class.getdrive 서비스 이용 등을 위해 아래와 같이 개인정보를 수집ᆞ이용합니다.
+② SingleThread는 Class.getdrive 서비스 회원가입, 회원 식별, Class.getdrive 서비스 이용 등을 위해 아래와 같이 개인정보를 수집ᆞ이용합니다.
 수집 목적	수집 항목	수집 근거	보유 기간
 회원 식별 및 Class.getdrive서비스 이용	(필수) 이메일, 비밀번호, 이름
 (선택) 프로필 사진, 부서, 직책, 생년월일	정보주체의 동의	회원탈퇴 시 까지
@@ -272,7 +280,7 @@ Class.getdrive 서비스는 개인정보를 다음의 목적을 위해 처리합
 		</ul>
 		</div>
 		<ul class="footBtwrap">
-			<li><button id="nextbutton" disabled="true">다음</button></li>
+			<li><button onclick="moveRegisterPage(); return false" id="button" disabled=true type="submit" >다음</button></li>
 		</ul>
 	</form>
 </body>

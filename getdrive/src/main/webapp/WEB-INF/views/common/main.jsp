@@ -16,6 +16,7 @@
 	width: 100%;
 	height: 20%;
 }
+
 #main {
 	width: 100%;
 	height: 650px;
@@ -57,7 +58,6 @@
 				<c:import url="/WEB-INF/views/member/login.jsp"></c:import>
 			</div>
 		</div>
-		<hr>
 		<div id="footer">
 			<c:import url="/WEB-INF/views/common/footer.jsp"></c:import>
 		</div>
