@@ -46,7 +46,6 @@
 </head>
 <body>
 
-1111
 	<div id="full">
 		<div id="header">
 			<c:import url="/WEB-INF/views/common/mainTopbar.jsp"></c:import>
@@ -61,7 +60,7 @@
 			</div>
 		</div>
 		<div id="footer">
-			<c:import url="/WEB-INF/views/common/footer.jsp"></c:import>
+			<c:import url="/WEB-INF/views/common/login_footer.jsp"></c:import>
 		</div>
 	</div>
 </body>
