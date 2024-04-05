@@ -11,20 +11,20 @@ public class Member implements java.io.Serializable{
 	private String email;
 	private String pwd;
 	private Date cdate;
-	private String loginType;
+	private Date ddate;
 	
 	public Member() {
 		super();
 	}
 
-	public Member(int accountNo, String name, String email, String pwd, Date cdate, String loginType) {
+	public Member(int accountNo, String name, String email, String pwd, Date cdate, Date ddate) {
 		super();
 		this.accountNo = accountNo;
 		this.name = name;
 		this.email = email;
 		this.pwd = pwd;
 		this.cdate = cdate;
-		this.loginType = loginType;
+		this.ddate = ddate;
 	}
 
 	public int getAccountNo() {
@@ -67,19 +67,18 @@ public class Member implements java.io.Serializable{
 		this.cdate = cdate;
 	}
 
-	public String getLoginType() {
-		return loginType;
+	public Date getDdate() {
+		return ddate;
 	}
 
-	public void setLoginType(String loginType) {
-		this.loginType = loginType;
+	public void setDdate(Date ddate) {
+		this.ddate = ddate;
 	}
 
 	@Override
 	public String toString() {
 		return "Member [accountNo=" + accountNo + ", name=" + name + ", email=" + email + ", pwd=" + pwd + ", cdate="
-				+ cdate + ", loginType=" + loginType + "]";
+				+ cdate + ", ddate=" + ddate + "]";
 	}
-	
 	
 }

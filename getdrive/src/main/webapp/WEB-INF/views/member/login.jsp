@@ -5,7 +5,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>first</title>
+<title></title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <style type="text/css">
 #loginzone {
 	width: 40%;
@@ -51,6 +52,8 @@ input {
 	line-height: 0;
 	text-indent: -9999px;
 }
+
+
 body, button, input, select, td, textarea, th {
 	font-size: 13px;
 	line-height: 1.5;
@@ -67,9 +70,7 @@ fieldset, img {
 	background-color: #fff;
 	box-sizing: border-box;
 }
-.box_login {
-	border: 1px solid #blue;
-}
+
 
 .inp_text {
 	position: relative;
@@ -182,53 +183,145 @@ fieldset, img {
 	border:none;
 }
 
-.notpermission {
+.loginErrorMessage {
+	width: 100%;
+	height: 20px;
 	color: red;
 	text-align: left;
 }
 </style>
 <script type="text/javascript">
 function moveContractPage(){
-	location.href = "contract.do";
+	location.href = "contractPage.do";
 }
+</script>
+<script src="/getdrive/resources/js/kakao.min.js"></script>
+<script>
+	//발급받은 키 중 javascript키를 사용해준다.
+	
+	//카카오로그인
+	/* function kakaoLogin() {
+    Kakao.Auth.login({
+    	scope: 'profile_nickname,account_email',
+        success: function(authObj) {  
+        	console.log(authObj);
+            Kakao.API.request({
+                url: '/v2/user/me',
+                success: res => {
+                	const id = res.id;
+                    const email = res.kakao_account.email;
+                    const name = res.properties.nickname;
+                    
+                    console.log(id);
+                    console.log(email);
+                    console.log(name);
+                    
+                    $('#kakaoEmail').val(email);
+                    $('#kakaoName').val(name);
+                    $('#kakaoId').val(id);
+
+                
+               
+					},
+					fail : function(error) {
+						console.log("Kakao API 요청 실패: " + error);
+					}
+				});
+			},
+			fail : function(error) {
+				console.log("Kakao 로그인 실패: " + error);
+			}
+		});
+	} */
+	Kakao.init('4d2b700f21f5db14e8df9701c31eef5e');
+	console.log(Kakao.isInitialized()); // sdk초기화여부판단
+	//로그인 후 정보 받기
+	//카카오톡 로그인
+	function kakaoLogin() {
+    Kakao.Auth.login({
+        success: function(response) { 
+            Kakao.API.request({
+                url: '/v2/user/me',
+                success: function(response) {
+                    console.log(response);
+                    console.log("카톡 로그인 아이디 : " + response.id)   
+                    console.log("카톡 닉네임 : " + response.properties.nickname)
+                    console.log("카톡 이메일 : " + response.kakao_account.email)
+
+                    //location.href="datatest.do?" + "id=" + response.id + "&" + "nickname=" + response.properties.nickname;
+                    $.get("kakao_register.do?" + "id=" + response.id + "&" + "nickname=" + response.properties.nickname + "&" + "email=" + response.kakao_account.email)
+                    console.log("kakao_register.do?" + "id=" + response.id + "&" + "nickname=" + response.properties.nickname + "&" + "email=" + response.kakao_account.email);
+
+					},
+					fail : function(error) {
+						console.log("Kakao API 요청 실패: " + error);
+					}
+				});
+			},
+			fail : function(error) {
+				console.log("Kakao 로그인 실패: " + error);
+			}
+		});
+	}
+	//카카오로그아웃  
+	function kakaoLogout() {
+		if (Kakao.Auth.getAccessToken()) {
+			Kakao.API.request({
+				url : '/v1/user/unlink',
+				success : function(response) {
+					console.log(response)
+					
+				},
+				fail : function(error) {
+					console.log(error);
+				},
+			})
+			Kakao.Auth.setAccessToken(undefined);
+		}
+	}
 </script>
 </head>
 <body>
-	<div id="loginzone">
-		<input type="hidden" name="redirectUrl"value="https://apost.dev/manage">
-		<fieldset>
-			<legend class="screen_out">로그인 정보 입력폼</legend>
-			<div class="box_login">
-				<div class="inp_text">
-					<label for="loginId" class="screen_out"> 아이디</label> 
-					<input type="email" id="loginId" name="loginId" placeholder="이메일" class="pos">
+		<div id="loginzone">
+			<fieldset>
+				<legend class="screen_out">로그인 정보 입력폼</legend>
+			<form id="loginForm" action="login.do" method="post">
+				<div class="box_login">
+					<div class="inp_text">
+					
+						<label for="loginId" class="screen_out"> 아이디</label> 
+						<input type="email" id="loginEmail" name="email" placeholder="이메일" class="pos">
+					</div>
+					<div class="inp_text">
+						<label for="loginPw" class="screen_out"> 비밀번호</label> 
+						<input type="password" id="loginPw" name="pwd" placeholder="비밀번호" class="pos">
+					</div>
 				</div>
-				<div class="inp_text">
-					<label for="loginPw" class="screen_out"> 비밀번호</label> 
-					<input type="password" id="loginPw" name="loginPw" placeholder="비밀번호" class="pos">
+				<h3> ${ requestScope.message }</h3>
+				<input type="submit" class="btn_login" value="Sign in">
+			</form>
+				<div class="login_append">
+					<span class="QR_login"> <a href="/member/find/password"
+						class="QR_login">QR코드로 로그인하기</a>
+					</span> <br> <span class="QR_login"> 
+						<a href="/member/find/password" class="QR_login">비밀번호 찾기</a>
+					</span>
+					<hr>
 				</div>
-			</div>
-			<div class="notpermission">아이디 또는 비밀번호가 일치하지 않습니다.</div>
-			<button type="submit" class="btn_login" disabled>Sign in</button>
-			<div class="login_append">
-				<span class="QR_login"> <a href="/member/find/password"
-					class="QR_login">QR코드로 로그인하기</a>
-				</span> <br> <span class="QR_login"> <a
-					href="/member/find/password" class="QR_login">비밀번호 찾기</a>
-				</span>
-				<hr>
-			</div>
-			<div class="login_bottom">
-				<div class="snsicon">
-					<a href="http://www.google.com"><img id="google" alt="getdrive" src="/getdrive/resources/images/google.png"></a> 
-					<a href="http://www.daum.net"><img id="kakao" alt="getdrive"src="/getdrive/resources/images/kakao.jpg"></a> 
-					<a href="http://www.naver.com"><img id="naver" alt="getdrive"src="/getdrive/resources/images/naver.png"></a>
+				<div class="login_bottom">
+					<div class="snsicon">
+						<a href="http://www.google.com"><img id="google" alt="getdrive" src="/getdrive/resources/images/google.png"></a> 
+						<img id="kakao" alt="getdrive" type="submit" onclick="kakaoLogin();" src="/getdrive/resources/images/kakao.jpg">
+						<a href="http://www.naver.com"><img id="naver" alt="getdrive"src="/getdrive/resources/images/naver.png"></a>
+						<button onclick="kakaoLogout();">카카오 로그아웃</button>
+				
+					</div>
+					<div>
+						<button onclick="moveContractPage(); return false" type="submit" class="join_button">아직 계정이 없으신가요?</button>
+					</div>
 				</div>
-				<div>
-					<button onclick="moveContractPage();" type="button" class="join_button">아직 계정이 없으신가요?</button></a>
-				</div>
-			</div>
-		</fieldset>
-	</div>
+			</fieldset>
+		</div>
+	
 </body>
 </html>
